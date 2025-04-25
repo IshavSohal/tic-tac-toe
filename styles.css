@@ -1,3 +1,4 @@
+/* RESET/NORMALIZE */
 /* Box sizing rules */
 *,
 *::before,
@@ -18,9 +19,10 @@ html {
 }
 
 body{
-    width: 90%;
-    height: 90%;
-    font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    width: 99%;
+    height: 99%;
+    min-width: 550px;
+    font-family: Garamond, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -86,7 +88,7 @@ tr:nth-child(odd) td {
 }
 
 
-/* Game styles */
+/* APP STYLES */
 body{
     display: flex;
     flex-direction: column;
@@ -94,9 +96,81 @@ body{
 }
 
 #title {
-    padding-bottom: 40px;
+    border-width: 0.5rem;
+    border-color: green;
+    border-style: outset;
+    outline: 0.5rem outset khaki;
+    padding: 20px;
+    margin: 20px;
+    margin-bottom: 40px;
 }
 
+
+/* Intro styling */
+#intro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#rules {
+    max-width: 50%;
+    border-width: 0.5rem;
+    border-color: green;
+    border-style: outset;
+    outline: 0.5rem outset khaki;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+#rules > p {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+#name-input {
+    display: flex;
+    gap: 20px;
+}
+
+#name-input > label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 20px;
+    text-align: center;
+}
+
+#name-input > label > input {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#error{
+    color: red;
+    font-size: 18px;
+}
+
+#start, #restart {
+    font-size: 24px;
+    border-radius: 20px;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: green;
+    color: khaki;
+}
+
+#start:hover, #restart:hover{
+    background-color:khaki;
+    color: green;
+}
+
+/* Game styling */
 #game {
     display: flex;
     flex-direction: column;
@@ -112,18 +186,12 @@ body{
     min-width: 500px;
     height: 500px;
     min-height: 500px;
-
+    border: 2px solid black;
 }
 
 #playerTurn {
     text-align: center;
-    font-size: 24px;
-}
-
-#intro{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    font-size: 32px;
 }
 
 .cell{
@@ -131,5 +199,7 @@ body{
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    font-size: 40px
+    font-size: 60px;
+    background-color: transparent;
+    font-family: Arial, Helvetica, sans-serif;
 }

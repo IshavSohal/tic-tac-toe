@@ -10,7 +10,18 @@
 <body>
     <h1 id="title">Tic Tac Toe</h1>
     <div id="intro">
-        Rules:
+        <div id="rules">
+            <p>Rules of the game</p>
+            <ul>
+                <li>
+                    Players take turns placing their marks (X or O) in empty squares, aiming to be the first to get three in a row (horizontally, vertically, or diagonally). 
+                </li>
+                <li>
+                    If all squares are filled and no player has three in a row, the game ends in a tie
+                </li>
+            </ul>
+        </div>
+        <div id="name-input">
             <label>
                 Enter Player 1 name:
                 <input type="text" id="player1">
@@ -19,10 +30,25 @@
                 Enter Player 2 name:
                 <input type="text" id="player2">
             </label>
-            <button id="start">Start Game</button>
         </div>
+
+        <p id="error"></p>
+        <button id="start">Start Game</button>
+    </div>
     <div id="game">
         <div id="playerTurn"></div>
+        <table id="score-table">
+            <tr>
+                <th id="player1-name">Player 1 wins</th>
+                <th id="player2-name">Player 2 wins</th>
+                <th>Draws</th>
+            </tr>
+            <tr>
+                <td id="player1-wins"></td>
+                <td id="player2-wins"></td>
+                <td id="draws"></td>
+            </tr>
+        </table>
         <div id="gameBoard">
             <button class="cell"></button>
             <button class="cell"></button>
@@ -35,9 +61,7 @@
             <button class="cell"></button>
         </div>
         <button id="restart">Restart Game</button>
-    </div>
-   
 
-    
+    </div>
 </body>
 </html>

@@ -67,7 +67,7 @@ const Gameboard = function () {
         if (
             board.reduce((total, value, index) => {
                 return total && value[index] === "O";
-            })
+            }, true)
         ) {
             return "O";
         }
@@ -84,7 +84,7 @@ const Gameboard = function () {
         if (
             board.reduce((total, value, index) => {
                 return total && value[columns - 1 - index] === "O";
-            })
+            }, true)
         ) {
             return "O";
         }
@@ -100,18 +100,16 @@ const Gameboard = function () {
 
 const Player = function (token, name) {
     let wins = 0;
-    let losses = 0;
     const getWins = () => wins;
     const setWins = () => wins++;
-    const getLosses = () => losses;
-    const setLosses = () => losses++;
-    return { token, name, getWins, setWins, getLosses, setLosses };
+    return { token, name, getWins, setWins };
 };
 
 const Game = function (player1, player2) {
     let turn = 0;
     let players = [Player("X", player1), Player("O", player2)];
     let board = Gameboard();
+    let draws = 0;
 
     const makeMove = (row, col) => {
         const res = board.placeToken(row, col, players[turn].token);
@@ -125,11 +123,10 @@ const Game = function (player1, player2) {
             if (gameState !== "Continue") {
                 if (gameState !== "Tied") {
                     const winner = gameState === "X" ? 0 : 1;
-                    const loser = gameState === "X" ? 1 : 0;
                     players[winner].setWins();
-                    players[loser].setLosses();
                     return 1;
                 } else {
+                    draws++;
                     return 2;
                 }
             }
@@ -146,12 +143,14 @@ const Game = function (player1, player2) {
     const resetGameState = () => {
         board.resetBoard();
         turn = 0;
-        console.log(`${players[0].name} score: ${players[0].getWins()} win(s),  ${players[0].getLosses()} loss(es)`);
-        console.log(`${players[1].name} score: ${players[1].getWins()} win(s),  ${players[1].getLosses()} loss(es)`);
     };
 
     const getPlayerTurn = () => {
         return players[turn];
+    };
+
+    const getScores = () => {
+        return { X: players[0].getWins(), O: players[1].getWins(), draws };
     };
 
     return {
@@ -160,6 +159,7 @@ const Game = function (player1, player2) {
         getBoard: board.getBoard,
         getPlayerTurn,
         resetGameState,
+        getScores,
     };
 };
 
@@ -173,6 +173,13 @@ const DisplayController = (function () {
     const restartButton = document.querySelector("#restart");
     const player1Input = document.querySelector("#player1");
     const player2Input = document.querySelector("#player2");
+    const errorMsg = document.querySelector("#error");
+    const scoreTable = document.querySelector("#score-table");
+    const player1TableHeader = document.querySelector("#player1-name");
+    const player2TableHeader = document.querySelector("#player2-name");
+    const player1TableWins = document.querySelector("#player1-wins");
+    const player2TableWins = document.querySelector("#player2-wins");
+    const tableDraws = document.querySelector("#draws");
 
     // Called when game is first loaded in. Once the names of the two users are provided,
     // the intro section will be removed, and the game section will be rendered in
@@ -183,9 +190,18 @@ const DisplayController = (function () {
             if (player1Input.value && player2Input.value) {
                 gameDiv.style.display = "";
                 introDiv.style.display = "none";
+                errorMsg.textContent = "";
+                scoreTable.style.display = "none";
                 game = Game(player1Input.value, player2Input.value);
                 initializeGameBoard();
+                player1TableHeader.textContent = `${player1Input.value}'s wins`;
+                player2TableHeader.textContent = `${player2Input.value}'s wins`;
+                player1TableWins.textContent = 0;
+                player2TableWins.textContent = 0;
+                tableDraws.textContent = 0;
                 game.printGameState();
+            } else {
+                errorMsg.textContent = "Please enter a name for each player";
             }
         });
     };
@@ -198,6 +214,7 @@ const DisplayController = (function () {
         for (let i = 0; i < cells.length; i++) {
             cells[i].disabled = false;
         }
+        scoreTable.style.display = "none";
     };
     // Called when the game section is first loaded in. This creates event listeners for each
     // cell that makes a move for the current player.
@@ -222,7 +239,12 @@ const DisplayController = (function () {
         } else {
             playerTurnDiv.textContent = "The game has ended in a draw :(";
         }
-        // get the winner and display message on screen
+        // Update table
+        const scores = game.getScores();
+        player1TableWins.textContent = scores["X"];
+        player2TableWins.textContent = scores["O"];
+        tableDraws.textContent = scores["draws"];
+        scoreTable.style.display = "";
     };
 
     // Called when the board state has updated, and the board in the DOM needs to reflect this
@@ -233,6 +255,7 @@ const DisplayController = (function () {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 cells[i * 3 + j].textContent = board[i][j];
+                cells[i * 3 + j].style.color = board[i][j] === "X" ? "green" : "khaki";
             }
         }
         playerTurnDiv.textContent = `It is ${currPlayer.name}'s turn (${currPlayer.token})`;
