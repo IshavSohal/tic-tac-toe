@@ -131,13 +131,7 @@ const Game = function (player1, player2) {
                 }
             }
         }
-        printGameState();
         return 0;
-    };
-
-    const printGameState = () => {
-        console.log(`It is ${players[turn].name}'s turn (${players[turn].token})`);
-        console.log(board.getBoard());
     };
 
     const resetGameState = () => {
@@ -155,7 +149,6 @@ const Game = function (player1, player2) {
 
     return {
         makeMove,
-        printGameState,
         getBoard: board.getBoard,
         getPlayerTurn,
         resetGameState,
@@ -199,7 +192,6 @@ const DisplayController = (function () {
                 player1TableWins.textContent = 0;
                 player2TableWins.textContent = 0;
                 tableDraws.textContent = 0;
-                game.printGameState();
             } else {
                 errorMsg.textContent = "Please enter a name for each player";
             }
